@@ -1,0 +1,17 @@
+# gecompileerde bestanden of mappen waar we die terugvinden
+__pycache__/
+*.py[cod]
+*$py.class
+
+# de database zelf, inclusief tijdelijke SQLite-bestanden (-journal, -wal, -shm)
+data/*.db*
+
+# instellingsbestanden
+settings.py
+.env
+
+# verborgen map van de virtuele omgeving
+.venv/
+
+# macOS
+.DS_Store
