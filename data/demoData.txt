@@ -1,0 +1,8 @@
+item,serial_number,make,model,date_bought,warranty_end,vendor_name,vendor_url,is_webshop
+vacuum,HNY-AL-2510-004821,Henry,Allergy,2025-10-10,2027-10-10,amazon,https://amazon.com.be,yes
+car,VF1FW0A0H12345678,Renault,Kangoo,2023-01-01,2028-01-01,carDealerShip,https://some.cardealer.ship,no
+car,UU1HSDCL956789012,Dacia,Duster,2024-05-05,2027-05-05,carDealerShip,https://some.cardealer.ship,no
+tv,QE55S99HATXXN,Samsung,Oled S99H,2023-01-31,2025-01-31,coolblue,https://www.coolblue.be,yes
+wasmachine,,Wisberg,WBWD16A3DWNB,2023-01-31,2026-01-31,coolblue,https://www.coolblue.be,yes
+smartphone,,Apple,Iphone 15 Pro,2024-02-29,2026-02-28,vandenborre,https://www.vandenborre.be,no
+hoofdtelefoon,7203841,Sony,WH-1000XM5,2023-08-31,2024-02-29,vinted,https://www.vinted.be,yes
