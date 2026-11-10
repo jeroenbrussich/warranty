@@ -1,6 +1,6 @@
 # ./data_layer/seed.py
 import csv
-import sqlite3
+from datetime import datetime
 
 import settings
 from data_layer.vendor_queries import VendorQueries
@@ -40,6 +40,15 @@ class Seed:
                 print(vendor_ids)
         finally:
             connection.close()
+
+    def months_between_dates(start_date, end_date):
+        start = datetime.strptime(start_date, "%Y-%m-%d").date()
+        end = datetime.strptime(end_date, "%Y-%m-%d").date()
+
+        years = end.year - start.year
+        months = end.month - start.month
+
+        return years * 12 + months
 
 
 if __name__ == "__main__":
