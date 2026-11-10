@@ -4,6 +4,7 @@ import sys
 try:
     import settings
     from data_layer.database import Database
+    from data_layer.seed import Seed
 except ModuleNotFoundError as err:
     if err.name == "settings":
         print(
@@ -55,16 +56,19 @@ def database_menu(db):
         print("Niets gewijzigd.")
         return
 
-    # 1 = nieuwe lege database
-    if keuze == "1":
+    # 1/2 = nieuwe lege database
+    if keuze in ("1", "2"):
         vervangen = db.create(overwrite=True)
         print(
-            "Database vervangen door een lege."
+            "Database vervangen door een leeg exemplaar."
             if vervangen
             else "Lege database aangemaakt."
         )
-    elif keuze == "2":
-        print("De demo database is nog niet beschikbaar (seed.py ontbreekt).")
+
+    # 2 = lege database opvullen
+    if keuze == "2":
+        seed = Seed(db)
+        seed.import_seed_file()
 
 
 def main():
