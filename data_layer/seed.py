@@ -41,7 +41,7 @@ class Seed:
         finally:
             connection.close()
 
-    def months_between_dates(start_date, end_date):
+    def __months_between_dates(self, start_date, end_date):
         start = datetime.strptime(start_date, "%Y-%m-%d").date()
         end = datetime.strptime(end_date, "%Y-%m-%d").date()
 
