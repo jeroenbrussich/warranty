@@ -10,6 +10,10 @@ Dit is een demo-app om de werking van Python te verkennen. De ontwikkelaar is zi
 
 ## App installeren
 
+> [!WARNING]
+>
+> Deze app heeft minstens Python 3.10 nodig om correct te werken.
+
 ### Virtuele omgeving
 
 Voer deze commando's uit in de hoofdmap van het project:
@@ -64,9 +68,16 @@ De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Star
 ├── data_layer
 │   ├── __init__.py
 │   ├── database.py
-│   └── schema.sql
+│   ├── schema.sql
+│   ├── seed.py
+│   └── vendor_queries.py
+├── domain_layer
+│   ├── __init__.py
+│   ├── item.py
+│   └── vendor.py
 ├── main.py
-└── settings.example.py
+├── settings.example.py
+└── settings.py
 ```
 
 ### data
