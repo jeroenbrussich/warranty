@@ -62,13 +62,3 @@ class Seed:
         months = end.month - start.month
 
         return years * 12 + months
-
-
-if __name__ == "__main__":
-    from data_layer.database import Database
-
-    db = Database()
-    db.create(overwrite=True)
-
-    seed = Seed(database=db)
-    seed.import_seed_file()
