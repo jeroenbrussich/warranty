@@ -8,6 +8,16 @@ Een commandline-tool om aankopen en hun garantie bij te houden: wat heb je gekoc
 
 Dit is een demo-app om de werking van Python te verkennen. De ontwikkelaar is zich ervan bewust dat er functionaliteiten ontbreken, en dat het databasemodel hiaten kan vertonen. Dit zijn bewuste keuzes om de POC snel vorm te geven. Mocht de app levensvatbaar zijn, dan kunnen deze tekortkomingen weggewerkt worden.
 
+Roadmap:
+
+- `item_name` (vacuum, car, tv) is eigenlijk een categorie: afsplitsen naar een eigen tabel
+- `make` afsplitsen naar eigen tabel
+- datavalidatie op `seed` implementeren:
+    - `is_webshop` moet nu verplicht _yes|no_ zijn
+- aankoopprijs bijhouden
+- aankoopbewijs bijhouden
+- unittests
+
 ## App installeren
 
 > [!WARNING]
@@ -55,7 +65,7 @@ De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Star
     - "de demo database aanmaken" als er nog geen database is, of
     - "vervangen door de demo database" als er al een staat.
 
-    Dit vult de database met de gegevens uit `demoData.txt`. TODO: werkt pas als `data_layer/seed.py` bestaat.
+    Dit vult de database met de gegevens uit `demoData.txt`.
 
 ## Bestandsstructuur
 
@@ -68,16 +78,19 @@ De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Star
 ├── data_layer
 │   ├── __init__.py
 │   ├── database.py
+│   ├── item_queries.py
+│   ├── queries.py
 │   ├── schema.sql
-│   ├── seed.py
 │   └── vendor_queries.py
 ├── domain_layer
 │   ├── __init__.py
 │   ├── item.py
 │   └── vendor.py
 ├── main.py
-├── settings.example.py
-└── settings.py
+├── service_layer
+│   ├── __init__.py
+│   └── seed.py
+└── settings.example.py
 ```
 
 ### data

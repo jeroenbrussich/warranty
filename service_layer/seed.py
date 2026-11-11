@@ -3,6 +3,7 @@ import csv
 from datetime import datetime
 
 import settings
+from data_layer.item_queries import ItemQueries
 from data_layer.vendor_queries import VendorQueries
 from domain_layer.item import Item
 from domain_layer.vendor import Vendor
@@ -17,7 +18,8 @@ class Seed:
         connection = self.__database.connect()
 
         try:
-            database_vendor = VendorQueries(connection)
+            vendor_queries = VendorQueries(connection)
+            item_queries = ItemQueries(connection)
             vendor_ids = {}
 
             with open(
@@ -25,19 +27,30 @@ class Seed:
             ) as seed:
                 reader = csv.DictReader(seed)
                 for row in reader:
-                    new_vendor = Vendor(
-                        vendor_name=row["vendor_name"],
-                        vendor_url=row["vendor_url"],
-                        vendor_is_webshop=row["is_webshop"] == "yes",
-                    )
-
                     key = row["vendor_name"].lower()
-                    if key not in vendor_ids:
-                        vendor_ids[key] = database_vendor.insert(
-                            new_vendor
-                        )  # save vendor id
 
-                print(vendor_ids)
+                    if key not in vendor_ids:
+                        vendor_ids[key] = vendor_queries.insert(
+                            Vendor(
+                                vendor_name=row["vendor_name"],
+                                vendor_url=row["vendor_url"],
+                                vendor_is_webshop=row["is_webshop"] == "yes",
+                            )
+                        )  # store vendor id
+
+                    item_queries.insert(
+                        Item(
+                            item_serial=row["serial_number"] or None,
+                            item_name=row["item"],
+                            item_make=row["make"],
+                            item_model=row["model"],
+                            item_date_bought=row["date_bought"],
+                            item_warranty=self.__months_between_dates(
+                                row["date_bought"], row["warranty_end"]
+                            ),
+                            vendor_id=vendor_ids[key],
+                        )
+                    )
         finally:
             connection.close()
 
