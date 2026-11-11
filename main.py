@@ -4,7 +4,7 @@ import sys
 try:
     import settings
     from data_layer.database import Database
-    from data_layer.seed import Seed
+    from service_layer.seed import Seed
 except ModuleNotFoundError as err:
     if err.name == "settings":
         print(
