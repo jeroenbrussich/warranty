@@ -63,7 +63,7 @@ De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Star
 
 3. **Een demodatabase aanmaken.** Kies bij het opstarten:
     - "de demo database aanmaken" als er nog geen database is, of
-    - "vervangen door de demo database" als er al een staat.
+    - "vervangen door de demo database" als er al een staat (je krijgt dan eerst een bevestigingsvraag).
 
     Dit vult de database met de gegevens uit `demoData.txt`.
 
@@ -95,7 +95,7 @@ De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Star
 
 ### data
 
-Deze map bevat het bestand met de demodata. Demodata is bewust vormgegeven als een niet-genormaliseerd tekstbestand. Het stelt de eerste poging voor van een gebruiker die een garantielijst wilde aanleggen. Dit tekstbestand kan worden ingelezen door `data_layer/seed.py`, dat de data transformeert naar een genormaliseerde databank.
+Deze map bevat het bestand met de demodata. Demodata is bewust vormgegeven als een niet-genormaliseerd tekstbestand. Het stelt de eerste poging voor van een gebruiker die een garantielijst wilde aanleggen. Dit tekstbestand kan worden ingelezen door `service_layer/seed.py`, dat de data transformeert naar een genormaliseerde databank.
 
 In deze map komt ook de database (`warranty.db`) te staan. Die zit niet in git.
 
@@ -105,6 +105,22 @@ Deze map bevat alle code die met SQLite praat:
 
 - `database.py`: de klasse `Database`, die connecties opent (met foreign keys aan) en de database aanmaakt.
 - `schema.sql`: de `CREATE TABLE`-statements.
+- `queries.py`: een kleine helper klasse die de queries uitvoert; `ItemQueries` en `VendorQueries` erven ervan
+- `item_queries.py`: verzameling van alle queries voor de tabel `item`
+- `vendor_queries.py`: verzameling van alle queries voor de tabel `vendor`
+
+### domain_layer
+
+Deze map bevat de domeinklassen, oftewel de objecten waarover de applicatie gaat:
+
+- `Item`
+- `Vendor`
+
+### service_layer
+
+Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output.
+
+- `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
 
 ## Database
 
