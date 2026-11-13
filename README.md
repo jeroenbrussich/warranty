@@ -67,6 +67,8 @@ De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Star
 
     Dit vult de database met de gegevens uit `demoData.txt`.
 
+Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden": de bestaande database blijft dan ongewijzigd.
+
 ## Bestandsstructuur
 
 ```shell
@@ -90,8 +92,16 @@ De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Star
 ├── service_layer
 │   ├── __init__.py
 │   └── seed.py
+├── ui_layer
+│   ├── __init__.py
+│   ├── helper_functions.py
+│   └── init_application.py
 └── settings.example.py
 ```
+
+### main.py
+
+Het ingangspunt van deze applicatie. Controleert bij het opstarten of alle modules en `settings.py` beschikbaar zijn, en roept daarna het databasemenu uit `ui_layer` aan.
 
 ### data
 
@@ -121,6 +131,13 @@ Deze map bevat de domeinklassen, oftewel de objecten waarover de applicatie gaat
 Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output.
 
 - `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
+
+### ui_layer
+
+Deze map bevat de functies die de interface vormen tussen gebruiker en applicatie.
+
+- `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden.
+- `init_application.py`: het menu dat bij het opstarten verschijnt. Je kiest of je een lege database aanmaakt, de demo-database aanmaakt, of een bestaande database behoudt. Wil je een bestaande database vervangen, dan vraagt het menu eerst om bevestiging.
 
 ## Database
 
