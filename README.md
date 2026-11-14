@@ -12,8 +12,11 @@ Roadmap:
 
 - `item_name` (vacuum, car, tv) is eigenlijk een categorie: afsplitsen naar een eigen tabel
 - `make` afsplitsen naar eigen tabel
+- mogelijkheid toevoegen om items te
+  - (soft) deleten
+  - wijzigen
 - datavalidatie op `seed` implementeren:
-    - `is_webshop` moet nu verplicht _yes|no_ zijn
+  - `is_webshop` moet nu verplicht _yes|no_ zijn
 - aankoopprijs bijhouden
 - aankoopbewijs bijhouden
 - unittests
@@ -95,13 +98,14 @@ Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden
 ├── ui_layer
 │   ├── __init__.py
 │   ├── helper_functions.py
-│   └── init_application.py
+│   ├── init_application.py
+│   └── main_menu.py
 └── settings.example.py
 ```
 
 ### main.py
 
-Het ingangspunt van deze applicatie. Controleert bij het opstarten of alle modules en `settings.py` beschikbaar zijn, en roept daarna het databasemenu uit `ui_layer` aan.
+Het ingangspunt van deze applicatie. Controleert bij het opstarten of alle modules en `settings.py` beschikbaar zijn, en roept daarna het databasemenu uit `ui_layer` aan. Daarna wordt het hoofdmenu (`main_menu.py`) getoond.
 
 ### data
 
@@ -138,6 +142,7 @@ Deze map bevat de functies die de interface vormen tussen gebruiker en applicati
 
 - `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden.
 - `init_application.py`: het menu dat bij het opstarten verschijnt. Je kiest of je een lege database aanmaakt, de demo-database aanmaakt, of een bestaande database behoudt. Wil je een bestaande database vervangen, dan vraagt het menu eerst om bevestiging.
+- `main_menu.py`: toont het hoofdmenu met opties `item toevoegen`, `item wijzigen`, `items exporteren` en de `applicatie sluiten`.
 
 ## Database
 
