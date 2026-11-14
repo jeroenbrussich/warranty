@@ -2,8 +2,8 @@
 import sys
 
 try:
-    import ui_layer.init_application as init
     from data_layer.database import Database
+    from ui_layer import init_application, main_menu
 except ModuleNotFoundError as err:
     if err.name == "settings":
         print(
@@ -16,7 +16,9 @@ except ModuleNotFoundError as err:
 
 def main():
     print("Applicatie wordt opgestart.")
-    init.choose_database(Database())
+    init_application.choose_database(Database())
+
+    main_menu.display_main_menu()
 
 
 if __name__ == "__main__":
