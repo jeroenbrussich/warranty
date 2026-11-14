@@ -8,7 +8,7 @@ from service_layer.seed import Seed
 def choose_database(db):
     exists = db.exists()
     if exists:
-        print(f"- [x] Database {settings.DATABASE_NAME} aanwezig.")
+        print(f"- [V] Database {settings.DATABASE_NAME} aanwezig.")
         choices = {
             "1": "vervangen door een lege database",
             "2": "vervangen door de demo database",
