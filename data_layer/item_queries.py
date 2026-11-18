@@ -1,4 +1,4 @@
-# ./data_layer/vendor_queries.py
+# ./data_layer/item_queries.py
 from data_layer.queries import Queries
 
 

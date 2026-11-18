@@ -26,21 +26,21 @@ class Database:
         """
         database_already_exists = self.exists()
 
-        with open(SCHEMA_PATH, encoding="utf-8") as schema:
-            sql_schema = schema.read()
-
         if not overwrite and database_already_exists:
             raise FileExistsError(self.path)
 
+        with open(SCHEMA_PATH, encoding="utf-8") as schema:
+            sql_schema = schema.read()
+
         os.makedirs(os.path.dirname(self.path), exist_ok=True)
 
-        if overwrite and database_already_exists:
+        if database_already_exists:
             os.remove(self.path)
 
         connection = self.connect()
         try:
             connection.executescript(sql_schema)
-        except sqlite3.Error:
+        except Exception:
             connection.close()
             os.remove(self.path)
             raise
