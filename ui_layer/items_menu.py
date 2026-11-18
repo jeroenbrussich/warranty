@@ -2,7 +2,7 @@
 
 import ui_layer.helper_functions as helper
 from domain_layer.item import Item
-from service_layer.item_service import ItemService
+from service_layer.item_service import DuplicateSerialError, ItemService
 from service_layer.vendor_service import VendorService
 
 
@@ -24,8 +24,12 @@ def display_items_menu(db):
         if choice == "1":
             item = collect_item_fields(db)
             if item is not None:
-                item_service.add_item(item)
-                print("Item toegevoegd.")
+                try:
+                    item_service.add_item(item)
+                except DuplicateSerialError:
+                    print("Er bestaat al een item met dit serienummer.")
+                else:
+                    print("Item toegevoegd.")
         elif choice == "4":
             return
 
