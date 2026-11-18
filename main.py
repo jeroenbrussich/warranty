@@ -1,5 +1,8 @@
 # ./main.py
+import locale
 import sys
+
+locale.setlocale(locale.LC_ALL, "nl_BE.UTF-8")
 
 try:
     from data_layer.database import Database
@@ -16,9 +19,10 @@ except ModuleNotFoundError as err:
 
 def main():
     print("Applicatie wordt opgestart.")
-    init_application.choose_database(Database())
+    db = Database()
+    init_application.choose_database(db)
 
-    main_menu.display_main_menu()
+    main_menu.display_main_menu(db)
 
 
 if __name__ == "__main__":
