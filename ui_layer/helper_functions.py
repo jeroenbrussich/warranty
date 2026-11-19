@@ -3,8 +3,15 @@
 from datetime import date, datetime
 
 
-def bevestig(vraag):
-    return input(f"{vraag} (j/n): ").strip().lower() == "j"
+def bevestig(vraag, default=None):
+    if default is None:
+        hint = "j/n"
+    else:
+        hint = "J/n" if default else "j/N"
+    antwoord = input(f"{vraag} ({hint}): ").strip().lower()
+    if antwoord == "" and default is not None:
+        return default
+    return antwoord == "j"
 
 
 def vraag_keuze(opties):

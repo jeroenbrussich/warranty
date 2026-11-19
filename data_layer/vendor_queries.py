@@ -15,14 +15,35 @@ class VendorQueries(Queries):
         )
         return cursor.lastrowid
 
+    def update(self, vendor):
+        query = """
+                UPDATE vendor
+                SET
+                    vendor_name = ?,
+                    vendor_url = ?,
+                    vendor_is_webshop = ?
+                WHERE
+                    vendor_id = ?
+            """
+        cursor = self._execute(
+            query,
+            (
+                vendor.vendor_name,
+                vendor.vendor_url,
+                vendor.vendor_is_webshop,
+                vendor.vendor_id,
+            ),
+        )
+        return cursor.rowcount
+
     def get_all(self):
         query = """
-            SELECT 
+            SELECT
                 vendor_id,
                 vendor_name,
                 vendor_url,
                 vendor_is_webshop
-            FROM vendor 
+            FROM vendor
             ORDER BY vendor_id
         """
 
