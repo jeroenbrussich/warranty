@@ -30,13 +30,13 @@ class VendorQueries(Queries):
         rows = cursor.fetchall()
 
         results = []
-        for row in rows:
+        for vendor_id, name, url, is_webshop in rows:
             results.append(
                 Vendor(
-                    vendor_id=row[0],
-                    vendor_name=row[1],
-                    vendor_url=row[2],
-                    vendor_is_webshop=bool(row[3]),
+                    vendor_id=vendor_id,
+                    vendor_name=name,
+                    vendor_url=url,
+                    vendor_is_webshop=bool(is_webshop),
                 )
             )
         return results
