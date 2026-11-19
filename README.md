@@ -2,7 +2,9 @@
 
 Een commandline-tool om aankopen en hun garantie bij te houden: wat heb je gekocht, waar, wanneer en hoelang loopt de garantie nog.
 
-> Functionaliteiten: TODO (invullen zodra het menu bestaat)
+> Functionaliteiten:
+>
+> - een item toevoegen, met keuze van de verkoper uit de bestaande verkopers
 
 ## Disclaimer
 
@@ -75,6 +77,7 @@ Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden
 ## Bestandsstructuur
 
 ```shell
+```shell
 .
 ├── LICENSE
 ├── README.md
@@ -94,18 +97,21 @@ Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden
 ├── main.py
 ├── service_layer
 │   ├── __init__.py
-│   └── seed.py
+│   ├── item_service.py
+│   ├── seed.py
+│   └── vendor_service.py
 ├── ui_layer
 │   ├── __init__.py
 │   ├── helper_functions.py
 │   ├── init_application.py
+│   ├── items_menu.py
 │   └── main_menu.py
 └── settings.example.py
 ```
 
 ### main.py
 
-Het ingangspunt van deze applicatie. Controleert bij het opstarten of alle modules en `settings.py` beschikbaar zijn, en roept daarna het databasemenu uit `ui_layer` aan. Daarna wordt het hoofdmenu (`main_menu.py`) getoond.
+Het ingangspunt van deze applicatie. Controleert bij het opstarten of alle modules en `settings.py` beschikbaar zijn, maakt één `Database` aan en roept daarna het databasemenu uit `ui_layer` aan. Daarna wordt het hoofdmenu (`main_menu.py`) getoond. De `Database` wordt doorgegeven aan de menu's, die hem aan de services geven.
 
 ### data
 
@@ -132,7 +138,11 @@ Deze map bevat de domeinklassen, oftewel de objecten waarover de applicatie gaat
 
 ### service_layer
 
-Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output.
+Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output. De services openen en sluiten ook de databaseverbinding voor elke taak, zodat de UI niets met SQLite te maken heeft.
+
+- `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
+- `item_service.py`: de klasse `ItemService`, die een `Item` in de database bewaart.
+- `vendor_service.py`: de klasse `VendorService`, die alle verkopers opvraagt.
 
 - `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
 
@@ -140,9 +150,10 @@ Deze map bevat de complexe businesslogica, of klassen die data transformeren voo
 
 Deze map bevat de functies die de interface vormen tussen gebruiker en applicatie.
 
-- `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden.
+- `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden: een bevestiging of keuze vragen, tekst, een datum (`dd-mm-jjjj`) of een garantie in maanden inlezen, en een verkoper kiezen. Elke functie blijft vragen tot de invoer geldig is.
 - `init_application.py`: het menu dat bij het opstarten verschijnt. Je kiest of je een lege database aanmaakt, de demo-database aanmaakt, of een bestaande database behoudt. Wil je een bestaande database vervangen, dan vraagt het menu eerst om bevestiging.
-- `main_menu.py`: toont het hoofdmenu met opties `item toevoegen`, `item wijzigen`, `items exporteren` en de `applicatie sluiten`.
+- `main_menu.py`: toont het hoofdmenu met de opties `items beheren` en `de app sluiten`.
+- `items_menu.py`: het menu voor items. Hier kun je een item toevoegen. Je kiest eerst de verkoper (of annuleert) en vult daarna de overige gegevens in.
 
 ## Database
 
