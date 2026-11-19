@@ -6,6 +6,8 @@ Een commandline-tool om aankopen en hun garantie bij te houden: wat heb je gekoc
 
 - een item toevoegen, met keuze van de verkoper uit de bestaande verkopers
 - een item wijzigen (huidige waarden blijven bewaard met enter)
+- een verkoper toevoegen
+- een verkoper wijzigen (huidige waarden blijven bewaard met enter; de website wis je met `-`)
 
 ## Disclaimer
 
@@ -15,7 +17,7 @@ Roadmap:
 
 - `item_name` (vacuum, car, tv) is eigenlijk een categorie: afsplitsen naar een eigen tabel
 - `make` afsplitsen naar eigen tabel
-- mogelijkheid toevoegen om items te
+- mogelijkheid toevoegen om items en verkopers te
   - (soft) deleten
 - datavalidatie op `seed` implementeren:
   - `is_webshop` moet nu verplicht _yes|no_ zijn
@@ -36,7 +38,7 @@ Voer deze commando's uit in de hoofdmap van het project:
 ```shell
 python3 -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt  # TODO: requirements.txt bestaat nog niet
+# pip install -r requirements.txt  # deze app maakt geen gebruik van extra libraries
 ```
 
 ### settings.py
@@ -55,9 +57,18 @@ cp settings.example.py settings.py
 
 Onder de lijn "HIERONDER NIETS WIJZIGEN" worden de volledige paden afgeleid (`DATA_DIR`, `DATABASE_PATH`, `SEED_FILE_PATH`). Alle paden zijn relatief aan de plaats van `settings.py`. De app werkt dus ongeacht vanuit welke map je ze start.
 
+## App starten
+
+Voer deze commando's uit in de hoofdmap van het project:
+
+```shell
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+python -m main
+```
+
 ### De database
 
-De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Start de app vanuit de hoofdmap met `python main.py`.
+De app werkt niet zonder database. Er zijn drie manieren om eraan te komen. Ze worden je aangeboden telkens je de app opstart.
 
 1. **Een bestaande database plaatsen.** Kopieer een bestaande database naar de data-map, met de bestandsnaam uit `DATABASE_NAME`.
 2. **Een lege database aanmaken.** Kies bij het opstarten:
@@ -104,7 +115,8 @@ Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden
 │   ├── helper_functions.py
 │   ├── init_application.py
 │   ├── items_menu.py
-│   └── main_menu.py
+│   ├── main_menu.py
+│   └── vendors_menu.py
 └── settings.example.py
 ```
 
@@ -140,17 +152,18 @@ Deze map bevat de domeinklassen, oftewel de objecten waarover de applicatie gaat
 Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output. De services openen en sluiten ook de databaseverbinding voor elke taak, zodat de UI niets met SQLite te maken heeft.
 
 - `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
-- `item_service.py`: de klasse `ItemService`, die  `Item`s toevoegt, wijzigt en opvraagt.
-- `vendor_service.py`: de klasse `VendorService`, die alle verkopers opvraagt.
+- `item_service.py`: de klasse `ItemService`, die  `Item`s toevoegt, wijzigt en opvraagt. Bij een dubbel serienummer gooit ze een `DuplicateSerialError`, zodat de UI geen SQLite-foutmelding hoeft te tonen.
+- `vendor_service.py`: de klasse `VendorService`, die `Vendor`s toevoegt, wijzigt en opvraagt. Bij een dubbele verkopersnaam (hoofdletterongevoelig) gooit ze een `DuplicateVendorNameError`.
 
 ### ui_layer
 
 Deze map bevat de functies die de interface vormen tussen gebruiker en applicatie.
 
-- `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden: een bevestiging of keuze vragen, tekst, een datum (`dd-mm-jjjj`) of een garantie in maanden inlezen, en een verkoper kiezen. Elke functie blijft vragen tot de invoer geldig is.
+- `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden: een bevestiging of keuze vragen, tekst, een datum (`dd-mm-jjjj`) of een garantie in maanden inlezen, en een verkoper of item kiezen. Elke functie blijft vragen tot de invoer geldig is. Bij het wijzigen krijgen de vragen een standaardwaarde mee, die met enter behouden blijft.
 - `init_application.py`: het menu dat bij het opstarten verschijnt. Je kiest of je een lege database aanmaakt, de demo-database aanmaakt, of een bestaande database behoudt. Wil je een bestaande database vervangen, dan vraagt het menu eerst om bevestiging.
-- `main_menu.py`: toont het hoofdmenu met de opties `items beheren` en `de app sluiten`.
+- `main_menu.py`: toont het hoofdmenu met de opties `items beheren`, `verkopers beheren` en `de app sluiten`.
 - `items_menu.py`: het menu voor items. Hier kun je een item toevoegen of wijzigen. Je kiest eerst de verkoper (of annuleert) en vult daarna de overige gegevens in. Bij het wijzigen toont elke vraag de huidige waarde, en met enter behoud je die. Een serienummer wis je door - in te typen.
+- `vendors_menu.py`: het menu voor verkopers. Hier kun je een verkoper toevoegen of wijzigen. De website is optioneel: bij het toevoegen laat je ze leeg, bij het wijzigen wis je ze door - in te typen. Bestaat de naam al (hoofdletters tellen niet), dan toont het menu een melding en wordt niets opgeslagen.
 
 ## Database
 
@@ -169,7 +182,7 @@ Table item {
 Table vendor {
   vendor_id integer [pk]
   vendor_name varchar [not null, unique, note: 'hoofdletterongevoelig']
-  vendor_url varchar [not null]
+  vendor_url varchar [null, note: 'optioneel']
   vendor_is_webshop bool [not null, note: 'in SQLite 0 of 1 (CHECK in schema.sql)']
 }
 ```
