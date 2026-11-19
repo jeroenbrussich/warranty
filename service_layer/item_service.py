@@ -37,5 +37,9 @@ class ItemService:
         connection = self.__database.connect()
         try:
             return ItemQueries(connection).update(item)
+        except sqlite3.IntegrityError as err:
+            if "item_serial" in str(err):
+                raise DuplicateSerialError(item.item_serial) from err
+            raise
         finally:
             connection.close()
