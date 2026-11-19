@@ -7,10 +7,9 @@ from service_layer.vendor_service import VendorService
 
 
 def display_items_menu(db):
-
     choices = {
         "1": "een item toevoegen",
-        # "2": "een item wijzigen",
+        "2": "een item wijzigen",
         # "3" : "een item verwijderen",
         "4": "terugkeren naar het hoofdmenu",
     }
@@ -22,53 +21,109 @@ def display_items_menu(db):
         choice = helper.vraag_keuze(choices)
 
         if choice == "1":
-            item = collect_item_fields(db)
-            if item is not None:
-                try:
-                    item_service.add_item(item)
-                except DuplicateSerialError:
-                    print("Er bestaat al een item met dit serienummer.")
-                else:
-                    print("Item toegevoegd.")
+            create_item(db, item_service)
+        elif choice == "2":
+            edit_item(db, item_service)
         elif choice == "4":
             return
 
 
-def collect_item_fields(db):
+def create_item(db, item_service):
+    item = collect_item_fields(db)
+    if item is None:
+        return
 
-    vendor_service = VendorService(db)
+    try:
+        item_service.add_item(item)
+    except DuplicateSerialError:
+        print("Er bestaat al een item met dit serienummer.")
+    else:
+        print("Item toegevoegd.")
 
-    vendors = vendor_service.get_all_vendors()
+
+def edit_item(db, item_service):
+    items = item_service.get_all_items()
+    if not items:
+        print("Er zijn nog geen items.")
+        return
+
+    current = helper.vraag_item(items, "Welk item wil je wijzigen?")
+    if current is None:
+        print("Wijzigen geannuleerd.")
+        return
+
+    updated = collect_item_fields(db, current)
+    if updated is None:
+        return
+
+    try:
+        item_service.update_item(updated)
+    except DuplicateSerialError:
+        print("Er bestaat al een item met dit serienummer.")
+    else:
+        print("Item gewijzigd.")
+
+
+def collect_item_fields(db, current=None):
+    vendors = VendorService(db).get_all_vendors()
     if not vendors:
         print("Er zijn nog geen verkopers. Voeg eerst een verkoper toe.")
         return None
 
-    vendor_id = helper.vraag_vendor(
-        vendors, "Bij welke verkoper heb je dit item gekocht?"
+    if current is None:
+        vendor_id = helper.vraag_vendor(
+            vendors, "Bij welke verkoper heb je dit item gekocht?"
+        )
+        if vendor_id is None:
+            print("Toevoegen geannuleerd.")
+            return None
+        defaults = Item(
+            item_name=None,
+            item_make=None,
+            item_model=None,
+            item_date_bought=None,
+            item_warranty=None,
+            vendor_id=None,
+        )
+    else:
+        defaults = current
+        vendor_id = current.vendor_id
+        vendor_names = {vendor.vendor_id: vendor.vendor_name for vendor in vendors}
+        if helper.bevestig(f"De verkoper is nu {vendor_names[vendor_id]}. Wijzigen?"):
+            chosen = helper.vraag_vendor(vendors, "Welke verkoper moet het worden?")
+            if chosen is not None:
+                vendor_id = chosen
+
+    name = helper.vraag_tekst(
+        "Welke naam wil je aan dit item geven? ", default=defaults.item_name
     )
-
-    if vendor_id is None:
-        print("Toevoegen geannuleerd.")
-        return None
-
-    name = helper.vraag_tekst("Welke naam wil je aan dit item geven? ")
 
     serial = helper.vraag_tekst(
-        "Wat is het serienummer van dit item? [enter om over te slaan] ",
+        "Wat is het serienummer van dit item? ",
         allow_empty=True,
+        default=defaults.item_serial,
     )
 
-    make = helper.vraag_tekst("Wie is de fabrikant van dit item? ")
+    make = helper.vraag_tekst(
+        "Wie is de fabrikant van dit item? ", default=defaults.item_make
+    )
 
-    model = helper.vraag_tekst("Wat is het type van dit item? ")
+    model = helper.vraag_tekst(
+        "Wat is het type van dit item? ", default=defaults.item_model
+    )
 
     date_bought = helper.vraag_datum(
-        "Wanneer heb je dit item aangekocht? Geef de datum in volgens het formaat dd-mm-jjjj "
+        "Wanneer heb je dit item aangekocht? Geef de datum in volgens het formaat dd-mm-jjjj ",
+        default=defaults.item_date_bought,
     )
 
-    warranty = helper.vraag_garantie("Hoeveel maanden garantie heb je op dit item? ")
+    warranty = helper.vraag_garantie(
+        "Hoeveel maanden garantie heb je op dit item? ",
+        default=defaults.item_warranty,
+    )
 
     return Item(
+        item_id=defaults.item_id,
         item_name=name,
         item_serial=serial,
         item_make=make,

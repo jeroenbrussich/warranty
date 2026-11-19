@@ -25,3 +25,17 @@ class ItemService:
             raise
         finally:
             connection.close()
+
+    def get_all_items(self):
+        connection = self.__database.connect()
+        try:
+            return ItemQueries(connection).get_all()
+        finally:
+            connection.close()
+
+    def update_item(self, item):
+        connection = self.__database.connect()
+        try:
+            return ItemQueries(connection).update(item)
+        finally:
+            connection.close()
