@@ -2,9 +2,10 @@
 
 Een commandline-tool om aankopen en hun garantie bij te houden: wat heb je gekocht, waar, wanneer en hoelang loopt de garantie nog.
 
-> Functionaliteiten:
->
-> - een item toevoegen, met keuze van de verkoper uit de bestaande verkopers
+## Functionaliteiten
+
+- een item toevoegen, met keuze van de verkoper uit de bestaande verkopers
+- een item wijzigen (huidige waarden blijven bewaard met enter)
 
 ## Disclaimer
 
@@ -16,7 +17,6 @@ Roadmap:
 - `make` afsplitsen naar eigen tabel
 - mogelijkheid toevoegen om items te
   - (soft) deleten
-  - wijzigen
 - datavalidatie op `seed` implementeren:
   - `is_webshop` moet nu verplicht _yes|no_ zijn
 - aankoopprijs bijhouden
@@ -76,7 +76,6 @@ Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden
 
 ## Bestandsstructuur
 
-```shell
 ```shell
 .
 ├── LICENSE
@@ -141,10 +140,8 @@ Deze map bevat de domeinklassen, oftewel de objecten waarover de applicatie gaat
 Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output. De services openen en sluiten ook de databaseverbinding voor elke taak, zodat de UI niets met SQLite te maken heeft.
 
 - `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
-- `item_service.py`: de klasse `ItemService`, die een `Item` in de database bewaart.
+- `item_service.py`: de klasse `ItemService`, die  `Item`s toevoegt, wijzigt en opvraagt.
 - `vendor_service.py`: de klasse `VendorService`, die alle verkopers opvraagt.
-
-- `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
 
 ### ui_layer
 
@@ -153,7 +150,7 @@ Deze map bevat de functies die de interface vormen tussen gebruiker en applicati
 - `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden: een bevestiging of keuze vragen, tekst, een datum (`dd-mm-jjjj`) of een garantie in maanden inlezen, en een verkoper kiezen. Elke functie blijft vragen tot de invoer geldig is.
 - `init_application.py`: het menu dat bij het opstarten verschijnt. Je kiest of je een lege database aanmaakt, de demo-database aanmaakt, of een bestaande database behoudt. Wil je een bestaande database vervangen, dan vraagt het menu eerst om bevestiging.
 - `main_menu.py`: toont het hoofdmenu met de opties `items beheren` en `de app sluiten`.
-- `items_menu.py`: het menu voor items. Hier kun je een item toevoegen. Je kiest eerst de verkoper (of annuleert) en vult daarna de overige gegevens in.
+- `items_menu.py`: het menu voor items. Hier kun je een item toevoegen of wijzigen. Je kiest eerst de verkoper (of annuleert) en vult daarna de overige gegevens in. Bij het wijzigen toont elke vraag de huidige waarde, en met enter behoud je die. Een serienummer wis je door - in te typen.
 
 ## Database
 
