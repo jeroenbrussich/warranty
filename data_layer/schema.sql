@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS vendor (
     vendor_id INTEGER PRIMARY KEY,
     vendor_name TEXT NOT NULL UNIQUE COLLATE NOCASE,
-    vendor_url TEXT NOT NULL,
+    vendor_url TEXT NULL,
     vendor_is_webshop INTEGER NOT NULL CHECK (vendor_is_webshop IN (0, 1)) -- 0 = fysieke winkel, 1 = webshop
 );
 
