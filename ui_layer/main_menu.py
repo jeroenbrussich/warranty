@@ -9,7 +9,7 @@ def display_main_menu(db):
         "1": "items beheren",
         # "2": "verkopers beheren",
         # "3" : "lijsten exporteren",
-        "4": "de app sluiten",
+        "q": "de app sluiten",
     }
 
     while True:
@@ -20,7 +20,7 @@ def display_main_menu(db):
         if choice == "1":
             display_items_menu(db)
 
-        elif choice == "4" and helper.bevestig(
+        elif choice == "q" and helper.bevestig(
             "Ben je zeker dat je de app wil sluiten?"
         ):
             return

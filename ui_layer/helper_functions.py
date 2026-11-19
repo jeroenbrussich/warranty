@@ -10,9 +10,9 @@ def bevestig(vraag):
 def vraag_keuze(opties):
     for nummer, omschrijving in opties.items():
         print(f"{nummer}. {omschrijving}")
-    keuze = input("Keuze: ").strip()
+    keuze = input("Keuze: ").strip().lower()
     while keuze not in opties:
-        keuze = input(f"Ongeldige keuze, kies {'/'.join(opties)}: ").strip()
+        keuze = input(f"Ongeldige keuze, kies {'/'.join(opties)}: ").strip().lower()
     return keuze
 
 
@@ -73,10 +73,10 @@ def vraag_garantie(vraag, default=None):
 
 def vraag_vendor(vendors, vraag):
     choices = {str(vendor.vendor_id): vendor.vendor_name for vendor in vendors}
-    choices["0"] = "annuleren"
+    choices["q"] = "annuleren"
     print(vraag)
     choice = vraag_keuze(choices)
-    if choice == "0":
+    if choice == "q":
         return None
     return int(choice)
 
@@ -86,10 +86,10 @@ def vraag_item(items, vraag):
         str(item.item_id): f"{item.item_name} ({item.item_make} {item.item_model})"
         for item in items
     }
-    choices["0"] = "annuleren"
+    choices["q"] = "annuleren"
     print(vraag)
     choice = vraag_keuze(choices)
-    if choice == "0":
+    if choice == "q":
         return None
     for item in items:
         if str(item.item_id) == choice:

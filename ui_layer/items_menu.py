@@ -11,7 +11,7 @@ def display_items_menu(db):
         "1": "een item toevoegen",
         "2": "een item wijzigen",
         # "3" : "een item verwijderen",
-        "4": "terugkeren naar het hoofdmenu",
+        "q": "terugkeren naar het hoofdmenu",
     }
     item_service = ItemService(db)
 
@@ -24,7 +24,7 @@ def display_items_menu(db):
             create_item(db, item_service)
         elif choice == "2":
             edit_item(db, item_service)
-        elif choice == "4":
+        elif choice == "q":
             return
 
 
