@@ -107,6 +107,8 @@ Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden
 ├── main.py
 ├── service_layer
 │   ├── __init__.py
+│   ├── database_service.py
+│   ├── errors.py
 │   ├── item_service.py
 │   ├── seed.py
 │   └── vendor_service.py
@@ -122,7 +124,7 @@ Staat er al een database, dan kun je bij het opstarten ook kiezen voor "behouden
 
 ### main.py
 
-Het ingangspunt van deze applicatie. Controleert bij het opstarten of alle modules en `settings.py` beschikbaar zijn, maakt één `Database` aan en roept daarna het databasemenu uit `ui_layer` aan. Daarna wordt het hoofdmenu (`main_menu.py`) getoond. De `Database` wordt doorgegeven aan de menu's, die hem aan de services geven.
+Het ingangspunt van deze applicatie. Controleert bij het opstarten of alle modules en `settings.py` beschikbaar zijn, maakt één `Database` aan en geeft die aan een `DatabaseService`, waarmee het databasemenu (`init_application.py`) wordt getoond. Daarna maakt het een `ItemService` en een `VendorService` aan en toont het hoofdmenu (`main_menu.py`).
 
 ### data
 
@@ -149,15 +151,17 @@ Deze map bevat de domeinklassen, oftewel de objecten waarover de applicatie gaat
 
 ### service_layer
 
-Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output. De services openen en sluiten ook de databaseverbinding voor elke taak, zodat de UI niets met SQLite te maken heeft.
+Deze map bevat de complexe businesslogica, of klassen die data transformeren voor opslag of output.
 
+- `database_service.py`: de klasse `DatabaseService`, die nagaat of de database bestaat en een lege database of een demodatabase aanmaakt (de demodata wordt ingelezen via `Seed`).
+- `errors.py`: de uitzondering `StorageError`, die de services gooien als iets in de database mislukt, anders dan een dubbele waarde.
 - `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
-- `item_service.py`: de klasse `ItemService`, die  `Item`s toevoegt, wijzigt en opvraagt. Bij een dubbel serienummer gooit ze een `DuplicateSerialError`, zodat de UI geen SQLite-foutmelding hoeft te tonen.
-- `vendor_service.py`: de klasse `VendorService`, die `Vendor`s toevoegt, wijzigt en opvraagt. Bij een dubbele verkopersnaam (hoofdletterongevoelig) gooit ze een `DuplicateVendorNameError`.
+- `item_service.py`: de klasse `ItemService`, die  `Item`s toevoegt, wijzigt en opvraagt. Bij een dubbel serienummer gooit ze een `DuplicateSerialError`. Andere databasefouten worden een `StorageError`.
+- `vendor_service.py`: de klasse `VendorService`, die `Vendor`s toevoegt, wijzigt en opvraagt. Bij een dubbele verkopersnaam (hoofdletterongevoelig) gooit ze een `DuplicateVendorNameError`. Andere databasefouten worden een `StorageError`.
 
 ### ui_layer
 
-Deze map bevat de functies die de interface vormen tussen gebruiker en applicatie.
+Deze map bevat de functies die de interface vormen tussen gebruiker en applicatie. De menu's krijgen hun services van `main.py`. Fouten van de services (`DuplicateSerialError`, `DuplicateVendorNameError` en `StorageError`) worden opgevangen en als melding getoond.
 
 - `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden: een bevestiging of keuze vragen, tekst, een datum (`dd-mm-jjjj`) of een garantie in maanden inlezen, en een verkoper of item kiezen. Elke functie blijft vragen tot de invoer geldig is. Bij het wijzigen krijgen de vragen een standaardwaarde mee, die met enter behouden blijft.
 - `init_application.py`: het menu dat bij het opstarten verschijnt. Je kiest of je een lege database aanmaakt, de demo-database aanmaakt, of een bestaande database behoudt. Wil je een bestaande database vervangen, dan vraagt het menu eerst om bevestiging.
