@@ -1,5 +1,7 @@
 # ./ui_layer/items_menu.py
 
+from service_layer.errors import StorageError
+
 import ui_layer.helper_functions as helper
 from domain_layer.item import Item
 from service_layer.item_service import DuplicateSerialError, ItemService
@@ -37,6 +39,8 @@ def create_item(db, item_service):
         item_service.add_item(item)
     except DuplicateSerialError:
         print("Er bestaat al een item met dit serienummer.")
+    except StorageError as err:
+        print(f"Het item werd niet toegevoegd: {err}")
     else:
         print("Item toegevoegd.")
 
@@ -60,6 +64,8 @@ def edit_item(db, item_service):
         item_service.update_item(updated)
     except DuplicateSerialError:
         print("Er bestaat al een item met dit serienummer.")
+    except StorageError as err:
+        print(f"Het item werd niet gewijzigd: {err}")
     else:
         print("Item gewijzigd.")
 

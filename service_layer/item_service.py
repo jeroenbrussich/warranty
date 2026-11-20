@@ -3,6 +3,7 @@
 import sqlite3
 
 from data_layer.item_queries import ItemQueries
+from service_layer.errors import StorageError
 
 
 class DuplicateSerialError(Exception):
@@ -22,7 +23,9 @@ class ItemService:
         except sqlite3.IntegrityError as err:
             if "item_serial" in str(err):
                 raise DuplicateSerialError(item.item_serial) from err
-            raise
+            raise StorageError(str(err)) from err
+        except sqlite3.DatabaseError as err:
+            raise StorageError(str(err)) from err
         finally:
             connection.close()
 
@@ -40,6 +43,8 @@ class ItemService:
         except sqlite3.IntegrityError as err:
             if "item_serial" in str(err):
                 raise DuplicateSerialError(item.item_serial) from err
-            raise
+            raise StorageError(str(err)) from err
+        except sqlite3.DatabaseError as err:
+            raise StorageError(str(err)) from err
         finally:
             connection.close()

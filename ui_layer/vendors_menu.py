@@ -1,5 +1,6 @@
 # ./ui_layer/vendor_menu.py
-import sqlite3
+
+from service_layer.errors import StorageError
 
 import ui_layer.helper_functions as helper
 from domain_layer.vendor import Vendor
@@ -39,7 +40,7 @@ def create_vendor(vendor_service):
         print("De verkoper werd toegevoegd.")
     except DuplicateVendorNameError:
         print(f"Er bestaat al een verkoper met de naam '{vendor.vendor_name}'.")
-    except sqlite3.DatabaseError as err:
+    except StorageError as err:
         print(f"De verkoper werd niet toegevoegd: {err}")
 
 
@@ -67,7 +68,7 @@ def edit_vendor(vendor_service):
         print("De verkoper werd gewijzigd.")
     except DuplicateVendorNameError:
         print(f"Er bestaat al een verkoper met de naam '{updated.vendor_name}'.")
-    except sqlite3.DatabaseError as err:
+    except StorageError as err:
         print(f"De verkoper werd niet gewijzigd: {err}")
 
 

@@ -3,6 +3,7 @@
 import sqlite3
 
 from data_layer.vendor_queries import VendorQueries
+from service_layer.errors import StorageError
 
 
 class DuplicateVendorNameError(Exception):
@@ -20,7 +21,9 @@ class VendorService:
         except sqlite3.IntegrityError as err:
             if "vendor_name" in str(err):
                 raise DuplicateVendorNameError(vendor.vendor_name) from err
-            raise
+            raise StorageError(str(err)) from err
+        except sqlite3.DatabaseError as err:
+            raise StorageError(str(err)) from err
         finally:
             connection.close()
 
@@ -31,7 +34,9 @@ class VendorService:
         except sqlite3.IntegrityError as err:
             if "vendor_name" in str(err):
                 raise DuplicateVendorNameError(vendor.vendor_name) from err
-            raise
+            raise StorageError(str(err)) from err
+        except sqlite3.DatabaseError as err:
+            raise StorageError(str(err)) from err
         finally:
             connection.close()
 
