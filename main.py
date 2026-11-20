@@ -1,8 +1,8 @@
 # ./main.py
-import locale
+# import locale
 import sys
 
-locale.setlocale(locale.LC_ALL, "nl_BE.UTF-8")
+# locale.setlocale(locale.LC_ALL, "nl_BE.UTF-8")
 
 try:
     from data_layer.database import Database
