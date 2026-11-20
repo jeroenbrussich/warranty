@@ -2,11 +2,10 @@
 
 import settings
 import ui_layer.helper_functions as helper
-from service_layer.seed import Seed
 
 
-def choose_database(db):
-    exists = db.exists()
+def choose_database(database_service):
+    exists = database_service.exists()
     if exists:
         print(f"- [V] Database {settings.DATABASE_NAME} aanwezig.")
         choices = {
@@ -33,16 +32,20 @@ def choose_database(db):
         print("Niets gewijzigd.")
         return
 
-    # 1/2 = nieuwe lege database
-    if choice in ("1", "2"):
-        replaced = db.create(overwrite=True)
+    # 1 = nieuwe lege database
+    if choice == "1":
+        replaced = database_service.create_empty(overwrite=True)
         print(
             "Database vervangen door een leeg exemplaar."
             if replaced
             else "Lege database aangemaakt."
         )
 
-    # 2 = lege database opvullen
+    # 2 = nieuwe database, opgevuld met demodata
     if choice == "2":
-        seed = Seed(db)
-        seed.import_seed_file()
+        replaced = database_service.create_demo(overwrite=True)
+        print(
+            "Database vervangen door de demo database."
+            if replaced
+            else "Demo database aangemaakt."
+        )

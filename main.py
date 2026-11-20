@@ -5,6 +5,8 @@ import sys
 # locale.setlocale(locale.LC_ALL, "nl_BE.UTF-8")
 
 try:
+    from service_layer.database_service import DatabaseService
+
     from data_layer.database import Database
     from ui_layer import init_application, main_menu
 except ModuleNotFoundError as err:
@@ -20,7 +22,7 @@ except ModuleNotFoundError as err:
 def main():
     print("Applicatie wordt opgestart.")
     db = Database()
-    init_application.choose_database(db)
+    init_application.choose_database(DatabaseService(db))
 
     main_menu.display_main_menu(db)
 
