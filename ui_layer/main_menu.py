@@ -5,7 +5,7 @@ from ui_layer.items_menu import display_items_menu
 from ui_layer.vendors_menu import display_vendors_menu
 
 
-def display_main_menu(db):
+def display_main_menu(item_service, vendor_service):
     choices = {
         "1": "items beheren",
         "2": "verkopers beheren",
@@ -19,9 +19,9 @@ def display_main_menu(db):
         choice = helper.vraag_keuze(choices)
 
         if choice == "1":
-            display_items_menu(db)
+            display_items_menu(item_service, vendor_service)
         elif choice == "2":
-            display_vendors_menu(db)
+            display_vendors_menu(vendor_service)
 
         elif choice == "q" and helper.bevestig(
             "Ben je zeker dat je de app wil sluiten?"

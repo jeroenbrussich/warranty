@@ -1,20 +1,18 @@
 # ./ui_layer/vendor_menu.py
 
-from service_layer.errors import StorageError
-
 import ui_layer.helper_functions as helper
 from domain_layer.vendor import Vendor
-from service_layer.vendor_service import DuplicateVendorNameError, VendorService
+from service_layer.errors import StorageError
+from service_layer.vendor_service import DuplicateVendorNameError
 
 
-def display_vendors_menu(db):
+def display_vendors_menu(vendor_service):
     choices = {
         "1": "een verkoper toevoegen",
         "2": "een verkoper wijzigen",
         # "3" : "een verkoper verwijderen",
         "q": "terugkeren naar het hoofdmenu",
     }
-    vendor_service = VendorService(db)
 
     while True:
         print("==== MENU: VERKOPERS ====")

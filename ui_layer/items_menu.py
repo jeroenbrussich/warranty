@@ -1,21 +1,18 @@
 # ./ui_layer/items_menu.py
 
-from service_layer.errors import StorageError
-
 import ui_layer.helper_functions as helper
 from domain_layer.item import Item
-from service_layer.item_service import DuplicateSerialError, ItemService
-from service_layer.vendor_service import VendorService
+from service_layer.errors import StorageError
+from service_layer.item_service import DuplicateSerialError
 
 
-def display_items_menu(db):
+def display_items_menu(item_service, vendor_service):
     choices = {
         "1": "een item toevoegen",
         "2": "een item wijzigen",
         # "3" : "een item verwijderen",
         "q": "terugkeren naar het hoofdmenu",
     }
-    item_service = ItemService(db)
 
     while True:
         print("==== MENU: ITEMS ====")
@@ -23,15 +20,15 @@ def display_items_menu(db):
         choice = helper.vraag_keuze(choices)
 
         if choice == "1":
-            create_item(db, item_service)
+            create_item(item_service, vendor_service)
         elif choice == "2":
-            edit_item(db, item_service)
+            edit_item(item_service, vendor_service)
         elif choice == "q":
             return
 
 
-def create_item(db, item_service):
-    item = collect_item_fields(db)
+def create_item(item_service, vendor_service):
+    item = collect_item_fields(vendor_service)
     if item is None:
         return
 
@@ -45,7 +42,7 @@ def create_item(db, item_service):
         print("Item toegevoegd.")
 
 
-def edit_item(db, item_service):
+def edit_item(item_service, vendor_service):
     items = item_service.get_all_items()
     if not items:
         print("Er zijn nog geen items.")
@@ -56,7 +53,7 @@ def edit_item(db, item_service):
         print("Wijzigen geannuleerd.")
         return
 
-    updated = collect_item_fields(db, current)
+    updated = collect_item_fields(vendor_service, current)
     if updated is None:
         return
 
@@ -70,8 +67,8 @@ def edit_item(db, item_service):
         print("Item gewijzigd.")
 
 
-def collect_item_fields(db, current=None):
-    vendors = VendorService(db).get_all_vendors()
+def collect_item_fields(vendor_service, current=None):
+    vendors = vendor_service.get_all_vendors()
     if not vendors:
         print("Er zijn nog geen verkopers. Voeg eerst een verkoper toe.")
         return None
