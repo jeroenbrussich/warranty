@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 
 import settings
+from service_layer.errors import NoDataToExportError
 
 
 def write_rows_to_csv(rows, filename):
@@ -11,7 +12,7 @@ def write_rows_to_csv(rows, filename):
         raise ValueError("Filename mag niet None zijn.")
 
     if not len(rows):
-        raise ValueError("Ik heb geen data om te exporteren.")
+        raise NoDataToExportError()
 
     prefix = datetime.strftime(datetime.now(), "%Y_%m_%d_%H_%M_%S_")
     headers = list(rows[0].keys())
