@@ -39,7 +39,7 @@ class ReportQueries(Queries):
                 "vendor_id": row[7],
                 "vendor_name": row[8],
                 "vendor_url": row[9] or None,
-                "vendor_is_webshop": "v" if row[10] else "x",
+                "vendor_is_webshop": bool(row[10]),
             }
             results.append(item)
 

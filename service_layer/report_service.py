@@ -58,6 +58,7 @@ class ReportService:
             )
             warranty_end = datetime.strftime(warranty_end_date, "%Y-%m-%d")
             row["item_warranty_end"] = warranty_end
+            row["vendor_is_webshop"] = "v" if row["vendor_is_webshop"] else "x"
 
         return rows
 
