@@ -5,6 +5,8 @@ __pycache__/
 
 # de database zelf, inclusief tijdelijke SQLite-bestanden (-journal, -wal, -shm)
 data/*.db*
+# de exportbestanden
+data/*.csv
 
 # instellingsbestanden
 settings.py
