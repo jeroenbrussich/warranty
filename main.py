@@ -8,6 +8,7 @@ try:
     from data_layer.database import Database
     from service_layer.database_service import DatabaseService
     from service_layer.item_service import ItemService
+    from service_layer.report_service import ReportService
     from service_layer.vendor_service import VendorService
     from ui_layer import init_application, main_menu
 except ModuleNotFoundError as err:
@@ -25,7 +26,7 @@ def main():
     db = Database()
     init_application.choose_database(DatabaseService(db))
 
-    main_menu.display_main_menu(ItemService(db), VendorService(db))
+    main_menu.display_main_menu(ItemService(db), VendorService(db), ReportService(db))
 
 
 if __name__ == "__main__":
