@@ -19,7 +19,7 @@ def write_rows_to_csv(rows, filename):
     filepath = os.path.join(settings.DATA_DIR, prefix + filename)
 
     if not filepath.endswith(".csv"):
-        filename += ".csv"
+        filepath += ".csv"
 
     os.makedirs(settings.DATA_DIR, exist_ok=True)
 
