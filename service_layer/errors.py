@@ -8,3 +8,7 @@ class StorageError(Exception):
 
 class NoDataToExportError(Exception):
     """Er zijn geen rijen om te exporteren."""
+
+
+class ExportError(Exception):
+    "Het bestand kon niet worden weggeschreven."

@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 import settings
-from service_layer.errors import NoDataToExportError
+from service_layer.errors import ExportError, NoDataToExportError
 
 
 def write_rows_to_csv(rows, filename):
@@ -21,11 +21,14 @@ def write_rows_to_csv(rows, filename):
     if not filepath.endswith(".csv"):
         filepath += ".csv"
 
-    os.makedirs(settings.DATA_DIR, exist_ok=True)
+    try:
+        os.makedirs(settings.DATA_DIR, exist_ok=True)
 
-    with open(filepath, "w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=headers)
-        writer.writeheader()
-        writer.writerows(rows)
+        with open(filepath, "w", newline="", encoding="utf-8") as file:
+            writer = csv.DictWriter(file, fieldnames=headers)
+            writer.writeheader()
+            writer.writerows(rows)
+    except OSError as err:
+        raise ExportError(str(err)) from err
 
     return filepath

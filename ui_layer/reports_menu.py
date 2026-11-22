@@ -1,7 +1,7 @@
 # ./ui_layer/reports_menu.py
 
 import ui_layer.helper_functions as helper
-from service_layer.errors import NoDataToExportError, StorageError
+from service_layer.errors import ExportError, NoDataToExportError, StorageError
 
 
 def display_reports_menu(report_service):
@@ -32,7 +32,7 @@ def export_report(export):
         path = export()
     except NoDataToExportError:
         print("Er is geen data om te exporteren.")
-    except StorageError as err:
+    except (ExportError, StorageError) as err:
         print(f"Het rapport werd niet aangemaakt: {err}")
     else:
         print(f"Het rapport werd weggeschreven naar {path}")
