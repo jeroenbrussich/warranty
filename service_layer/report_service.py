@@ -32,13 +32,13 @@ class ReportService:
         )
 
     def export_items_out_of_warranty(self):
-        under_warranty = lambda item: (
+        warranty_expired = lambda item: (
             datetime.strptime(item["item_warranty_end"], "%Y-%m-%d").date()
             < date.today()
         )
         rows = self.__get_items_with_vendor_and_warranty_end_date()
         return exporter.write_rows_to_csv(
-            rows=list(filter(under_warranty, rows)),
+            rows=list(filter(warranty_expired, rows)),
             filename=settings.CSV_FILE_NAME_ALL_ITEMS_WITH_VENDORS_WARRANTY_EXPIRED,
         )
 
