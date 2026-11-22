@@ -1,4 +1,4 @@
-# ./ui_layer/vendor_menu.py
+# ./ui_layer/vendors_menu.py
 
 import ui_layer.helper_functions as helper
 from domain_layer.vendor import Vendor
