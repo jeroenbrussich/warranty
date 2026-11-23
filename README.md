@@ -4,8 +4,10 @@ Een commandline-tool om aankopen en hun garantie bij te houden: wat heb je gekoc
 
 ## Functionaliteiten
 
+- een overzicht van alle items opvragen op het scherm (naam, fabrikant, type, aankoopdatum en einddatum van de garantie)
 - een item toevoegen, met keuze van de verkoper uit de bestaande verkopers
 - een item wijzigen (huidige waarden blijven bewaard met enter)
+- een overzicht van alle verkopers opvragen op het scherm (naam, website en webshop of fysieke winkel)
 - een verkoper toevoegen
 - een verkoper wijzigen (huidige waarden blijven bewaard met enter; de website wis je met `-`)
 - drie lijsten exporteren naar csv: alle items met hun verkoper, enkel de items onder garantie en enkel de items buiten garantie
@@ -180,7 +182,7 @@ Deze map bevat de complexe businesslogica, of klassen die data transformeren voo
 - `seed.py` leest het demobestand `SEED_FILE_NAME` (standaard data/demoData.txt) uit en transformeert de data zodat die naar de database kan worden weggeschreven.
 - `item_service.py`: de klasse `ItemService`, die  `Item`s toevoegt, wijzigt en opvraagt. Bij een dubbel serienummer gooit ze een `DuplicateSerialError`. Andere databasefouten worden een `StorageError`.
 - `vendor_service.py`: de klasse `VendorService`, die `Vendor`s toevoegt, wijzigt en opvraagt. Bij een dubbele verkopersnaam (hoofdletterongevoelig) gooit ze een `DuplicateVendorNameError`. Andere databasefouten worden een `StorageError`.
-- `report_service.py`: de klasse `ReportService`, die de items met hun verkoper opvraagt, de einddatum van de garantie berekent (aankoopdatum plus garantie in maanden), de lijst eventueel filtert op onder of buiten garantie en doorgeeft aan `csv_export_service.py`. Databasefouten worden een `StorageError`.
+- `report_service.py`: de klasse `ReportService`, die de items met hun verkoper opvraagt, de einddatum van de garantie berekent (aankoopdatum plus garantie in maanden), de lijst eventueel filtert op onder of buiten garantie en doorgeeft aan `csv_export_service.py`.
 - `csv_export_service.py`: schrijft een lijst rijen weg naar een csv-bestand in de data-map, met de datum en het uur van de export voor de bestandsnaam. Geeft het pad van het bestand terug.
 
 ### ui_layer
@@ -190,9 +192,9 @@ Deze map bevat de functies die de interface vormen tussen gebruiker en applicati
 - `helper_functions.py`: een collectie van generieke functies die op meerdere plaatsen gebruikt kunnen worden: een bevestiging of keuze vragen, tekst, een datum (`dd-mm-jjjj`) of een garantie in maanden inlezen, en een verkoper of item kiezen. Elke functie blijft vragen tot de invoer geldig is. Bij het wijzigen krijgen de vragen een standaardwaarde mee, die met enter behouden blijft.
 - `init_application.py`: het menu dat bij het opstarten verschijnt. Je kiest of je een lege database aanmaakt, de demo-database aanmaakt, of een bestaande database behoudt. Wil je een bestaande database vervangen, dan vraagt het menu eerst om bevestiging.
 - `main_menu.py`: toont het hoofdmenu met de opties `items beheren`, `verkopers beheren`, `lijsten exporteren` en `de app sluiten`.
-- `items_menu.py`: het menu voor items. Hier kun je een item toevoegen of wijzigen. Je kiest eerst de verkoper (of annuleert) en vult daarna de overige gegevens in. Bij het wijzigen toont elke vraag de huidige waarde, en met enter behoud je die. Een serienummer wis je door - in te typen.
+- `items_menu.py`: het menu voor items. Hier kun je een overzicht van alle items opvragen (optie `0`, een tabel op het scherm; is de database leeg, dan krijg je een melding), en een item toevoegen of wijzigen. Bij het aanmaken, kies je eerst de verkoper en vul je daarna de overige gegevens in. Bij het wijzigen toont elke vraag de huidige waarde, en met enter behoud je die. Een serienummer wis je door - in te typen.
 - `reports_menu.py`: het menu voor de rapporten. Je kiest welke lijst je wilt exporteren en krijgt het pad van het weggeschreven csv-bestand te zien.
-- `vendors_menu.py`: het menu voor verkopers. Hier kun je een verkoper toevoegen of wijzigen. De website is optioneel: bij het toevoegen laat je ze leeg, bij het wijzigen wis je ze door - in te typen. Bestaat de naam al (hoofdletters tellen niet), dan toont het menu een melding en wordt niets opgeslagen.
+- `vendors_menu.py`: het menu voor verkopers. Hier kun je een overzicht van alle verkopers opvragen (optie `0`, een tabel op het scherm), een verkoper toevoegen of wijzigen. De website is optioneel: bij het toevoegen laat je ze leeg, bij het wijzigen wis je ze door - in te typen. Bestaat de naam al (hoofdletters tellen niet), dan toont het menu een melding en wordt niets opgeslagen.
 
 ## Database
 
