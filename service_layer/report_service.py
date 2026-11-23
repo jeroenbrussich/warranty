@@ -26,7 +26,7 @@ class ReportService:
             datetime.strptime(item["item_warranty_end"], "%Y-%m-%d").date()
             >= date.today()
         )
-        rows = self.__get_items_with_vendor_and_warranty_end_date()
+        rows = self.get_items_with_vendor_and_warranty_end_date()
         return exporter.write_rows_to_csv(
             rows=list(filter(under_warranty, rows)),
             filename=settings.CSV_FILE_NAME_ALL_ITEMS_WITH_VENDORS_UNDER_WARRANTY,
@@ -37,7 +37,7 @@ class ReportService:
             datetime.strptime(item["item_warranty_end"], "%Y-%m-%d").date()
             < date.today()
         )
-        rows = self.__get_items_with_vendor_and_warranty_end_date()
+        rows = self.get_items_with_vendor_and_warranty_end_date()
         return exporter.write_rows_to_csv(
             rows=list(filter(warranty_expired, rows)),
             filename=settings.CSV_FILE_NAME_ALL_ITEMS_WITH_VENDORS_WARRANTY_EXPIRED,
