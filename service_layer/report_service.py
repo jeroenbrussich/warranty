@@ -16,7 +16,7 @@ class ReportService:
         self.__database = database
 
     def export_items_with_vendors(self):
-        rows = self.__get_items_with_vendor_and_warranty_end_date()
+        rows = self.get_items_with_vendor_and_warranty_end_date()
         return exporter.write_rows_to_csv(
             rows=rows, filename=settings.CSV_FILE_NAME_ALL_ITEMS_WITH_VENDORS
         )
@@ -43,7 +43,7 @@ class ReportService:
             filename=settings.CSV_FILE_NAME_ALL_ITEMS_WITH_VENDORS_WARRANTY_EXPIRED,
         )
 
-    def __get_items_with_vendor_and_warranty_end_date(self):
+    def get_items_with_vendor_and_warranty_end_date(self):
         connection = self.__database.connect()
         try:
             rows = ReportQueries(connection).get_items_with_vendors()

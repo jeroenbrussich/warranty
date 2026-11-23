@@ -20,7 +20,7 @@ def display_main_menu(item_service, vendor_service, report_service):
         choice = helper.vraag_keuze(choices)
 
         if choice == "1":
-            display_items_menu(item_service, vendor_service)
+            display_items_menu(item_service, vendor_service, report_service)
         elif choice == "2":
             display_vendors_menu(vendor_service)
         elif choice == "3":
