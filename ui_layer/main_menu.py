@@ -22,7 +22,7 @@ def display_main_menu(item_service, vendor_service, report_service):
         if choice == "1":
             display_items_menu(item_service, vendor_service, report_service)
         elif choice == "2":
-            display_vendors_menu(vendor_service)
+            display_vendors_menu(vendor_service, report_service)
         elif choice == "3":
             display_reports_menu(report_service)
         elif choice == "q" and helper.bevestig(
