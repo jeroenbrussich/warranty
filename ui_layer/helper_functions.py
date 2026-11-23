@@ -11,7 +11,7 @@ def bevestig(vraag, default=None):
     antwoord = input(f"{vraag} ({hint}): ").strip().lower()
     if antwoord == "" and default is not None:
         return default
-    return antwoord == "j"
+    return antwoord in ("j", "ja")
 
 
 def vraag_keuze(opties):
