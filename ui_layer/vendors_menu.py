@@ -32,15 +32,19 @@ def display_vendors_menu(vendor_service):
 
 def show_vendors(vendor_service):
     vendors = vendor_service.get_all_vendors()
+
     if not vendors:
         print("Er zijn nog geen verkopers.")
         return
+
+    sort_by_name = lambda vendor: vendor.vendor_name.lower()
+    vendors_sorted_by_name = sorted(vendors, key=sort_by_name)
 
     print()
     print(f"| {'—' * 15} | {'—' * 30} | {'—' * 15} |")
     print(f"| {'naam':^15} | {'url':^30} | {'webshop?':^15} |")
     print(f"| {'_' * 15} | {'_' * 30} | {'_' * 15} |")
-    for vendor in vendors:
+    for vendor in vendors_sorted_by_name:
         webshop = "v" if vendor.vendor_is_webshop else "x"
         print(
             f"| {vendor.vendor_name:<15} | {vendor.vendor_url or '-':<30.30} | {webshop:<15} |"
@@ -51,9 +55,6 @@ def show_vendors(vendor_service):
 
 def create_vendor(vendor_service):
     vendor = collect_vendor_fields()
-
-    if vendor is None:
-        return
 
     try:
         vendor_service.add_vendor(vendor)
