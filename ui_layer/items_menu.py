@@ -34,19 +34,20 @@ def show_items(report_service):
     items = report_service.get_items_with_vendor_and_warranty_end_date()
     if not len(items):
         print("De database bevat nog geen gegevens.")
-    else:
-        print()
-        print(f"| {'—' * 15} | {'—' * 15} | {'—' * 15} | {'—' * 15} | {'—' * 15} |")
+        return
+
+    print()
+    print(f"| {'—' * 15} | {'—' * 15} | {'—' * 15} | {'—' * 15} | {'—' * 15} |")
+    print(
+        f"| {'naam':^15} | {'fabrikant':^15} | {'type':^15} | {'aangekocht':^15} | {'einde garantie':^15} |"
+    )
+    print(f"| {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} |")
+    for item in items:
         print(
-            f"| {'naam':^15} | {'fabrikant':^15} | {'type':^15} | {'aangekocht':^15} | {'einde garantie':^15} |"
+            f"| {item['item_name']:<15} | {item['item_make']:<15} | {item['item_model']:<15} | {item['item_date_bought']:<15} | {item['item_warranty_end']:<15} |"
         )
-        print(f"| {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} |")
-        for item in items:
-            print(
-                f"| {item['item_name']:<15} | {item['item_make']:<15} | {item['item_model']:<15} | {item['item_date_bought']:<15} | {item['item_warranty_end']:<15} |"
-            )
-        print(f"| {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} | ")
-        print()
+    print(f"| {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} | {'_' * 15} | ")
+    print()
 
 
 def create_item(item_service, vendor_service):
